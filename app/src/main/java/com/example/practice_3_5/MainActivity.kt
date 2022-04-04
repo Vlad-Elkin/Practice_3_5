@@ -19,15 +19,28 @@ class MainActivity : AppCompatActivity() {
             if (swap){
                 supportFragmentManager.beginTransaction().replace(R.id.fragment1,BlueFragment()).commit()
                 supportFragmentManager.beginTransaction().replace(R.id.fragment2,RedFragment()).commit()
-
-                Log.d("swap1",swap.toString())
             }
             else{
                 supportFragmentManager.beginTransaction().replace(R.id.fragment2,BlueFragment()).commit()
                 supportFragmentManager.beginTransaction().replace(R.id.fragment1,RedFragment()).commit()
-                Log.d("swap2",swap.toString())
             }
-            swap!=swap
+            swap=!swap
         }
+    }
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.putBoolean("swap",swap)
+        super.onSaveInstanceState(outState)
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        if (savedInstanceState.getBoolean("swap")){
+            supportFragmentManager.beginTransaction().add(R.id.fragment2,BlueFragment()).commit()
+            supportFragmentManager.beginTransaction().add(R.id.fragment1,RedFragment()).commit()
+        }
+        else{
+            supportFragmentManager.beginTransaction().add(R.id.fragment1,BlueFragment()).commit()
+            supportFragmentManager.beginTransaction().add(R.id.fragment2,RedFragment()).commit()
+        }
+        super.onRestoreInstanceState(savedInstanceState)
     }
 }
