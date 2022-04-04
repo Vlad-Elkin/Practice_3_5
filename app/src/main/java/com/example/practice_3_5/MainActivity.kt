@@ -13,27 +13,24 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val blueFragment:BlueFragment = BlueFragment()
-        val redFragment:RedFragment = RedFragment()
         val caption:Button = findViewById(R.id.caption)
-        supportFragmentManager.beginTransaction().add(R.id.fragment1,redFragment).commit()
-        supportFragmentManager.beginTransaction().add(R.id.fragment2,blueFragment).commit()
+        supportFragmentManager.beginTransaction().add(R.id.fragment1,RedFragment()).commit()
+        supportFragmentManager.beginTransaction().add(R.id.fragment2,BlueFragment()).commit()
+        var swap = false
         caption.setOnClickListener {
-            with(supportFragmentManager){
-                val fragment1=when(findFragmentById(R.id.fragment1)){
-                    redFragment->blueFragment
-                    blueFragment->redFragment
-                    else -> {}
-                }
-                beginTransaction().replace(R.id.fragment1, fragment1 as Fragment).commit()
-                val fragment2 = when(findFragmentById(R.id.fragment2)){
-                    redFragment->blueFragment
-                    blueFragment->redFragment
-                    else -> {}
-                }
-                beginTransaction().replace(R.id.fragment2, fragment2 as Fragment).commit()
+            val fragment1:Fragment
+            val fragment2:Fragment
+            if (swap){
+                fragment1=RedFragment()
+                fragment2=BlueFragment()
+                swap = false
+            }else{
+                fragment1=BlueFragment()
+                fragment2=RedFragment()
+                swap = true
             }
-
+            supportFragmentManager.beginTransaction().replace(R.id.fragment1,fragment1).commit()
+            supportFragmentManager.beginTransaction().replace(R.id.fragment2,fragment2).commit()
         }
     }
 }
